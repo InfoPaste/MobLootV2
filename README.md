@@ -1,1 +1,3 @@
-# MobLootV2
+Spigot Plugin
+
+# MobLoot V2

@@ -1,0 +1,70 @@
+ name: MobLoot
+ version: 2.0.0
+ description: Control items/money mobs drop
+ author: InfoPaste
+ website: https://www.spigotmc.org/resources/21653/
+
+ main: me.InfoPaste.MobLoot.Main
+ database: false
+ softdepend: [Vault]
+
+ commands:
+    mobloot:
+      description: Opens MobLoot GUI
+      usage: /<command>
+      aliases: [ml]
+    item:
+      description: Commands for editing items
+      usage: /<command>
+      aliases: [hand, edit]
+
+ permissions:
+    mobloot.*:
+      description: Access to all MobLoot permissions and commands
+      children:
+        mobloot.gui: true
+        mobloot.item: true
+        mobloot.item.name: true
+        mobloot.item.lore: true
+        mobloot.item.percent: true
+        mobloot.item.hideattributes: true
+        mobloot.item.removelores: true
+        mobloot.item.broadcast: true
+        mobloot.item.message: true
+        mobloot.item.command.console: true
+        mobloot.item.command.player: true
+
+    mobloot.gui:
+      description: Open and use the MobLoot GUI
+      default: op
+
+    mobloot.item.name:
+      description: Allow user to set the names of items with /item name <Name>
+      default: op
+    mobloot.item.lore:
+      description: Allow user to set the lores of items with /item lore <Lore>
+      default: op
+    mobloot.item.percent:
+      description: Allow user to set the percentage of items with /item percent <1-100>
+      default: op
+    mobloot.item.hideattributes:
+      description: Allow user to set the lores of items with /item hideattributes
+      default: op
+    mobloot.item.enchant:
+      description: Allow user to set the lores of items with /item enchant <Enchantment> <Level>
+      default: op
+    mobloot.item.removelores:
+      description: Allow user to set the lores of items with /item removelores
+      default: op
+    mobloot.item.broadcast:
+      description: Allow user to set broadcast messages to items with /item broadcast <Message>
+      default: op
+    mobloot.item.message:
+      description: Allow user to set message messages to items with /item message <Message>
+      default: op
+    mobloot.item.command.console:
+      description: Allow user to set a command to be excuted by console with /item console <Command>
+      default: op
+    mobloot.item.command.player:
+      description: Allow user to set a command to be excuted by player with /item player <Command>
+      default: op

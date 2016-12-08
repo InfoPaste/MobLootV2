@@ -1,0 +1,17 @@
+# All inventory information is stored in this file
+# Highly recommend you do not touch this file, unless you know what you're doing
+Categorizes:
+  Passive:
+    - ''
+  Neutral:
+    - ''
+  Hostile:
+    - ''
+  Tameable:
+    - ''
+  Utility:
+    - ''
+  Boss:
+    - ''
+  Unused:
+    - ''

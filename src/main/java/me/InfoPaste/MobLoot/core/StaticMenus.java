@@ -23,14 +23,14 @@ public class StaticMenus {
 
     private static StaticMenus instance;
 
+    static {
+        instance = new StaticMenus();
+    }
+
     private IconMenu mainMenu;
     private HashMap<MobCategories, IconMenu> subMenus;
 
     public StaticMenus() {
-    }
-
-    static {
-        instance = new StaticMenus();
     }
 
     public static StaticMenus getInstance() {
@@ -147,7 +147,7 @@ public class StaticMenus {
 
         /* MAIN MENU - Static items */
 
-        mainMenu.setOption(9, new ItemStackBuilder(Material.GRASS).withName("&aWorlds").build(), "World");
+        mainMenu.setOption(9, new ItemStackBuilder(Material.GRASS).withName("&aWorlds").build(), "Worlds");
 
         return;
     }

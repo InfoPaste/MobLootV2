@@ -11,6 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Categories mobs
+ * This method allows for backwards compatibility
+ */
 public enum MobCategories {
 
     PASSIVE("Passive", ChatColor.GREEN) {
@@ -275,22 +279,6 @@ public enum MobCategories {
         this.chatColor = chatColor;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public ChatColor getColor() {
-        return chatColor;
-    }
-
-    public String getFormattedName() {
-        return chatColor + name + " Mobs";
-    }
-
-    public abstract List<EntityType> getMobs();
-
-    public abstract ItemStack getIcon();
-
     private static List<EntityType> stringToEntityType(String[] names) {
 
         List<EntityType> entityTypes = new ArrayList<EntityType>();
@@ -340,14 +328,19 @@ public enum MobCategories {
         }
     }
 
-    public static int catigories() {
-
-        int size = 8;
-
-        if (UNCATEGORIZED.getMobs().size() > 0) {
-            size++;
-        }
-
-        return size;
+    public String getName() {
+        return name;
     }
+
+    public ChatColor getColor() {
+        return chatColor;
+    }
+
+    public String getFormattedName() {
+        return chatColor + name + " Mobs";
+    }
+
+    public abstract List<EntityType> getMobs();
+
+    public abstract ItemStack getIcon();
 }

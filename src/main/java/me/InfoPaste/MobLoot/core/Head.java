@@ -2,6 +2,9 @@ package me.InfoPaste.MobLoot.core;
 
 import org.bukkit.entity.EntityType;
 
+/*
+ * Heads that will be loaded into Inventories
+ */
 public enum Head {
 
     ARMOR_STAND(null),
@@ -62,13 +65,6 @@ public enum Head {
         this.head = head;
     }
 
-    public String getHead() {
-        if (head == null || head == "") {
-            return UNKNOWN.getHead();
-        }
-        return head;
-    }
-
     public static String getHeadOf(EntityType entity) {
 
         for (Head head : Head.values()) {
@@ -78,6 +74,13 @@ public enum Head {
         }
 
         return UNKNOWN.getHead();
+    }
+
+    public String getHead() {
+        if (head == null || head == "") {
+            return UNKNOWN.getHead();
+        }
+        return head;
     }
 
 }

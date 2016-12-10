@@ -5,6 +5,7 @@ import me.InfoPaste.MobLoot.commands.MainCommands;
 import me.InfoPaste.MobLoot.core.Config;
 import me.InfoPaste.MobLoot.core.StaticMenus;
 import me.InfoPaste.MobLoot.hooks.HookManager;
+import me.InfoPaste.MobLoot.listeners.DeathEvents;
 import me.InfoPaste.MobLoot.objects.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -22,6 +23,42 @@ public class Main extends JavaPlugin {
 
     public static Plugin plugin;
 
+    private static void registerEvents(org.bukkit.plugin.Plugin plugin, Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+        }
+    }
+
+    private static String checkWebsiteForString() {
+
+        try {
+
+            int resource = 21653;
+
+            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
+
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.getOutputStream()
+                    .write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + resource)
+                            .getBytes("UTF-8"));
+
+            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+
+            if (version.length() <= 7) {
+                return version.replaceAll("[B]", "");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Error";
+    }
+
+    public static String getPrefix() {
+        return "&8[&aMobLoot&8]&7 ";
+    }
+
     @Override
     public void onEnable() {
 
@@ -31,9 +68,12 @@ public class Main extends JavaPlugin {
 
         HookManager.loadDependencies();
         Config.setup();
-
         loadCommands();
+
+        // Check logger into a Singleton?
         loadLogger();
+
+        registerEvents(this, new DeathEvents());
 
         StaticMenus st = StaticMenus.getInstance();
         st.initializeMenus();
@@ -64,41 +104,5 @@ public class Main extends JavaPlugin {
     private void loadCommands() {
         getCommand("item").setExecutor(new ItemCommands());
         getCommand("mobloot").setExecutor(new MainCommands());
-    }
-
-    private static void registerEvents(org.bukkit.plugin.Plugin plugin, Listener... listeners) {
-        for (Listener listener : listeners) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
-        }
-    }
-
-    public static String checkWebsiteForString() {
-
-        try {
-
-            int resource = 21653;
-
-            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
-            con.getOutputStream()
-                    .write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + resource)
-                            .getBytes("UTF-8"));
-
-            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-
-            if (version.length() <= 7) {
-                return version.replaceAll("[B]", "");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "Error";
-    }
-
-    public static String getPrefix() {
-        return "&8[&aMobLoot&8]&7 ";
     }
 }

@@ -1,15 +1,14 @@
 package me.InfoPaste.MobLoot.utils;
 
+import me.InfoPaste.MobLoot.core.Config;
 import me.InfoPaste.MobLoot.objects.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.World;
 
 public class WorldUtil {
 
-    public static boolean isWorldEnabled(World world) {
-
-
-        return true;
+    public static boolean isEnabledWorld(World world) {
+        return !Config.data.getStringList("DisabledWorlds").contains(world.getName());
     }
 
     public static ItemStackBuilder createWorldItem(World world, boolean enabled) {

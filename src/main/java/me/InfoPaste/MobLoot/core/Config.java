@@ -12,9 +12,8 @@ import static me.InfoPaste.MobLoot.Main.plugin;
 public class Config {
 
     public static FileConfiguration config;
-    static File cfile;
-
     public static FileConfiguration data;
+    static File cfile;
     static File dfile;
 
     public static void setup() {
@@ -90,8 +89,9 @@ public class Config {
     public static void reloadDataFile() {
 
         if (data == null) {
-            dfile = new File(plugin.getDataFolder(), "config.yml");
+            dfile = new File(plugin.getDataFolder(), "data.yml");
         }
+
         data = YamlConfiguration.loadConfiguration(dfile);
 
         try {
@@ -103,7 +103,6 @@ public class Config {
                 data.setDefaults(defConfig);
             }
         } catch (NullPointerException ignored) {
-
         }
     }
 

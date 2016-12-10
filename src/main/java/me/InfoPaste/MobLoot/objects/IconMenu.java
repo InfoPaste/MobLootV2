@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -86,7 +87,7 @@ public class IconMenu implements Listener {
             event.setCancelled(true);
             int slot = event.getRawSlot();
             if (slot >= 0 && slot < size && optionNames[slot] != null) {
-                OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot]);
+                OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], event.getClick(), event.getCurrentItem());
                 handler.onOptionClick(e);
                 if (e.willClose()) {
                     final Player p = (Player) event.getWhoClicked();
@@ -103,6 +104,14 @@ public class IconMenu implements Listener {
         }
     }
 
+    private ItemStack setItemNameAndLore(ItemStack item, String name, String[] lore) {
+        ItemMeta im = item.getItemMeta();
+        im.setDisplayName(name);
+        im.setLore(Arrays.asList(lore));
+        item.setItemMeta(im);
+        return item;
+    }
+
     public interface OptionClickEventHandler {
         void onOptionClick(OptionClickEvent event);
     }
@@ -113,13 +122,17 @@ public class IconMenu implements Listener {
         private String name;
         private boolean close;
         private boolean destroy;
+        private ClickType clickType;
+        private ItemStack item;
 
-        public OptionClickEvent(Player player, int position, String name) {
+        public OptionClickEvent(Player player, int position, String name, ClickType clickType, ItemStack item) {
             this.player = player;
             this.position = position;
             this.name = name;
             this.close = true;
             this.destroy = false;
+            this.clickType = clickType;
+            this.item = item;
         }
 
         public Player getPlayer() {
@@ -149,14 +162,14 @@ public class IconMenu implements Listener {
         public void setWillDestroy(boolean destroy) {
             this.destroy = destroy;
         }
-    }
 
-    private ItemStack setItemNameAndLore(ItemStack item, String name, String[] lore) {
-        ItemMeta im = item.getItemMeta();
-        im.setDisplayName(name);
-        im.setLore(Arrays.asList(lore));
-        item.setItemMeta(im);
-        return item;
+        public ClickType getClick() {
+            return clickType;
+        }
+
+        public ItemStack getClickedItem() {
+            return item;
+        }
     }
 
 }

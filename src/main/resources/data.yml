@@ -1,3 +1,5 @@
 # !! Sensitive data !!
+# These values can be changed in game
+# It is recommend you do not change them in the this file
 DisabledWorlds:
     - 'name-of-a-world-here'

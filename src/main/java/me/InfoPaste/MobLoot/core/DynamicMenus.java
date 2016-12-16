@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +27,23 @@ public class DynamicMenus {
         return instance;
     }
 
-    public IconMenu loadEntityMenu(String entity) {
+    public IconMenu loadEntityMenu(final String entity) {
 
-        //TODO: Load Menu from data file Async
+        String path = "Mobs." + entity;
+
+
+        if (Config.data.contains(path)) {
+
+        } else {
+
+        }
 
         return null;
     }
 
     public IconMenu loadWorldsMenu() {
 
-        //TODO: Create worlds into a menu
-
-        final IconMenu iconMenu = new IconMenu("Worlds", 6 * 9, new IconMenu.OptionClickEventHandler() {
+        IconMenu iconMenu = new IconMenu("Worlds", 6 * 9, new IconMenu.OptionClickEventHandler() {
             public void onOptionClick(IconMenu.OptionClickEvent event) {
 
                 event.setWillClose(false);
@@ -46,17 +52,23 @@ public class DynamicMenus {
                 String name = event.getName();
 
                 if (name.equalsIgnoreCase("Back")) {
+
+                    player.closeInventory();
                     StaticMenus.getInstance().getMainMenu().open(player);
+
                 } else {
                     List<String> disabledWorlds = Config.data.getStringList("DisabledWorlds");
 
                     if (disabledWorlds.contains(name)) {
                         disabledWorlds.remove(name);
+
+                        event.getInventory().setItem(event.getPosition(), enabledWorldIcon(Bukkit.getWorld(event.getName())));
                     } else {
                         disabledWorlds.add(name);
+                        event.getInventory().setItem(event.getPosition(), disableWorldIcon(Bukkit.getWorld(event.getName())));
                     }
 
-                    // TODO: Replace Icon or reload inventory
+                    player.updateInventory();
 
                     Config.data.set("DisabledWorlds", disabledWorlds);
                     Config.saveData();
@@ -64,43 +76,20 @@ public class DynamicMenus {
 
                 }
             }
+        }, new IconMenu.OptionCloseEventHandler() {
+            public void onOptionClose(IconMenu.OptionCloseEvent event) {
+                event.getPlayer().sendMessage("..");
+
+            }
         });
 
         int i = 0;
         for (World world : Bukkit.getServer().getWorlds()) {
 
-            List<String> lore = new ArrayList<String>();
-            lore.add(" ");
-            lore.add("&7Difficulty: " + world.getDifficulty().name());
-            lore.add("&7World Type: " + world.getWorldType().name());
-            lore.add("&7Environment: " + world.getEnvironment().name());
-
             if (WorldUtil.isEnabledWorld(world)) {
-
-                lore.add(0, "&7click the icon to &cdisable&7.");
-                lore.add(0, "&7MobLoot is &aenabled&7 in this world,");
-
-                Material material;
-
-                switch (world.getEnvironment()) {
-                    case NETHER:
-                        material = Material.NETHERRACK;
-                        break;
-                    case NORMAL:
-                        material = Material.GRASS;
-                        break;
-                    case THE_END:
-                        material = Material.ENDER_STONE;
-                        break;
-                    default:
-                        material = Material.BEDROCK;
-                }
-
-                iconMenu.setOption(i, new ItemStackBuilder(material).withName("&a" + world.getName()).withLore(lore).build(), world.getName());
+                iconMenu.setOption(i, enabledWorldIcon(world), world.getName());
             } else {
-                lore.add(0, "&7click the icon to &aenable&7.");
-                lore.add(0, "&7MobLoot is &cdisabled&7 in this world,");
-                iconMenu.setOption(i, new ItemStackBuilder(Material.WOOL, 14).withName("&c" + world.getName()).withLore(lore).build(), world.getName());
+                iconMenu.setOption(i, disableWorldIcon(world), world.getName());
             }
 
             i++;
@@ -109,5 +98,49 @@ public class DynamicMenus {
         iconMenu.setOption(45, new ItemStackBuilder(Material.REDSTONE).withName("&cBack").build(), "Back");
 
         return iconMenu;
+    }
+
+    private ItemStack enabledWorldIcon(World world) {
+
+        List<String> lore = new ArrayList<String>();
+
+        lore.add("&7click the icon to &cdisable&7.");
+        lore.add("&7MobLoot is &aenabled&7 in this world,");
+        lore.add(" ");
+        lore.add("&7Difficulty: " + world.getDifficulty().name());
+        lore.add("&7World Type: " + world.getWorldType().name());
+        lore.add("&7Environment: " + world.getEnvironment().name());
+
+        Material material;
+
+        switch (world.getEnvironment()) {
+            case NETHER:
+                material = Material.NETHERRACK;
+                break;
+            case NORMAL:
+                material = Material.GRASS;
+                break;
+            case THE_END:
+                material = Material.ENDER_STONE;
+                break;
+            default:
+                material = Material.BEDROCK;
+        }
+
+        return new ItemStackBuilder(material).withName("&a" + world.getName()).withLore(lore).build();
+    }
+
+    private ItemStack disableWorldIcon(World world) {
+
+        List<String> lore = new ArrayList<String>();
+
+        lore.add("&7MobLoot is &cdisabled&7 in this world,");
+        lore.add("&7click the icon to &aenable&7.");
+        lore.add(" ");
+        lore.add("&7Difficulty: " + world.getDifficulty().name());
+        lore.add("&7World Type: " + world.getWorldType().name());
+        lore.add("&7Environment: " + world.getEnvironment().name());
+
+        return new ItemStackBuilder(Material.WOOL, 14).withName("&c" + world.getName()).withLore(lore).build();
     }
 }

@@ -305,7 +305,7 @@ public enum MobCategories {
             }
         }
 
-        return null;
+        return UNCATEGORIZED;
     }
 
     public static MobCategories getCategory(EntityType entityType) {

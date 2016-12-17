@@ -3,7 +3,6 @@ package me.InfoPaste.MobLoot.core;
 
 import me.InfoPaste.MobLoot.objects.IconMenu;
 import me.InfoPaste.MobLoot.objects.ItemStackBuilder;
-import me.InfoPaste.MobLoot.objects.Timer;
 import me.InfoPaste.MobLoot.utils.InventoryUtil;
 import me.InfoPaste.MobLoot.utils.TextUtil;
 import org.bukkit.Material;
@@ -13,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-import static me.InfoPaste.MobLoot.Main.getPrefix;
 import static me.InfoPaste.MobLoot.Main.plugin;
 
 /*
@@ -74,7 +72,6 @@ public class StaticMenus {
                 } else {
                     event.setWillClose(true);
                     // Not a mob Category Menu
-                    //TODO: Open other menu
                 }
             }
         });
@@ -103,24 +100,12 @@ public class StaticMenus {
                         mainMenu.open(player);
                     } else {
 
-                        Timer timer = new Timer(true);
-                        TextUtil.sendMessage(player, getPrefix() + "Loading &e" + TextUtil.formatEntityName(name) + "&7, this may take a few seconds...");
+                        // Open menu of entity they clicked
+                        player.closeInventory();
 
-                        // Load menu of entity they clicked
-                        DynamicMenus dynamicMenus = DynamicMenus.getInstance();
-                        IconMenu entityMenu = dynamicMenus.loadEntityMenu(name);
+                        MobMenus.openMobMenu(player, name);
 
-                        if (entityMenu != null) {
-                            // Open menu of entity they clicked
-                            entityMenu.open(player);
-                        } else {
-                            // Something when wrong
-                        }
-
-                        timer.stop();
-                        TextUtil.sendMessage(player, getPrefix() + "Completed: &e" + timer.time() + "&7ms");
                     }
-                    //TODO: Open menu they of mob the clicked
                 }
             });
 

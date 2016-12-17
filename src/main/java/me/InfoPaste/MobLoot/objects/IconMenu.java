@@ -9,12 +9,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Arrays;
 
 import static me.InfoPaste.MobLoot.Main.plugin;
 
@@ -23,64 +19,22 @@ public class IconMenu implements Listener {
     private String name;
     private int size;
     private OptionClickEventHandler clickHandler;
-    private OptionCloseEventHandler closeHandler;
 
     private String[] optionNames;
     private ItemStack[] optionIcons;
-
-    public IconMenu(String name, int size, OptionClickEventHandler handler1, OptionCloseEventHandler handler2) {
-        this.name = name;
-        this.size = size;
-        this.clickHandler = handler1;
-        this.closeHandler = handler2;
-        this.optionNames = new String[size];
-        this.optionIcons = new ItemStack[size];
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    public IconMenu(String name, int size, OptionCloseEventHandler handler) {
-        this.name = name;
-        this.size = size;
-        this.closeHandler = handler;
-        this.clickHandler = new OptionClickEventHandler() {
-            public void onOptionClick(OptionClickEvent event) {
-                return;
-            }
-        };
-        this.optionNames = new String[size];
-        this.optionIcons = new ItemStack[size];
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
 
     public IconMenu(String name, int size, OptionClickEventHandler handler) {
         this.name = name;
         this.size = size;
         this.clickHandler = handler;
-        this.closeHandler = new OptionCloseEventHandler() {
-            public void onOptionClose(OptionCloseEvent event) {
-                return;
-            }
-        };
         this.optionNames = new String[size];
         this.optionIcons = new ItemStack[size];
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    public IconMenu setOption(int position, ItemStack icon, String name, String... info) {
-        optionNames[position] = name;
-        optionIcons[position] = setItemNameAndLore(icon, name, info);
-        return this;
-    }
-
     public IconMenu setOption(int position, ItemStack icon, String name) {
         optionNames[position] = name;
         optionIcons[position] = icon;
-        return this;
-    }
-
-    public IconMenu setOption(int position, ItemStackBuilder icon, String name) {
-        optionNames[position] = name;
-        optionIcons[position] = icon.build();
         return this;
     }
 
@@ -114,10 +68,13 @@ public class IconMenu implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onInventoryClick(InventoryClickEvent event) {
+
         if (event.getInventory().getTitle().equals(name)) {
             event.setCancelled(true);
             int slot = event.getRawSlot();
+
             if (slot >= 0 && slot < size && optionNames[slot] != null) {
+
                 OptionClickEvent e = new OptionClickEvent((Player) event.getWhoClicked(), slot, optionNames[slot], event.getClick(), event.getCurrentItem(), event.getClickedInventory());
                 clickHandler.onOptionClick(e);
 
@@ -136,60 +93,8 @@ public class IconMenu implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getTitle().equals(name)) {
-            OptionCloseEvent e = new OptionCloseEvent((Player) event.getPlayer(), event.getInventory());
-            closeHandler.onOptionClose(e);
-            if (e.willDestroy()) {
-                destroy();
-            }
-        }
-    }
-
-    private ItemStack setItemNameAndLore(ItemStack item, String name, String[] lore) {
-        ItemMeta im = item.getItemMeta();
-        im.setDisplayName(name);
-        im.setLore(Arrays.asList(lore));
-        item.setItemMeta(im);
-        return item;
-    }
-
     public interface OptionClickEventHandler {
         void onOptionClick(OptionClickEvent event);
-    }
-
-    public interface OptionCloseEventHandler {
-        void onOptionClose(OptionCloseEvent event);
-    }
-
-    public class OptionCloseEvent {
-        private Inventory inventory;
-        private Player player;
-        private boolean destroy;
-
-        public OptionCloseEvent(Player player, Inventory inventory) {
-            this.inventory = inventory;
-            this.player = player;
-            this.destroy = false;
-        }
-
-        public Player getPlayer() {
-            return player;
-        }
-
-        public Inventory getInventory() {
-            return inventory;
-        }
-
-        public boolean willDestroy() {
-            return destroy;
-        }
-
-        public void setWillDestroy(boolean destroy) {
-            this.destroy = destroy;
-        }
-
     }
 
     public class OptionClickEvent {

@@ -43,6 +43,7 @@ public class DynamicMenus {
 
     public IconMenu loadWorldsMenu() {
 
+
         IconMenu iconMenu = new IconMenu("Worlds", 6 * 9, new IconMenu.OptionClickEventHandler() {
             public void onOptionClick(IconMenu.OptionClickEvent event) {
 
@@ -75,11 +76,6 @@ public class DynamicMenus {
                     Config.reloadDataFile();
 
                 }
-            }
-        }, new IconMenu.OptionCloseEventHandler() {
-            public void onOptionClose(IconMenu.OptionCloseEvent event) {
-                event.getPlayer().sendMessage("..");
-
             }
         });
 

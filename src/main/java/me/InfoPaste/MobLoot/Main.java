@@ -3,6 +3,7 @@ package me.InfoPaste.MobLoot;
 import me.InfoPaste.MobLoot.commands.ItemCommands;
 import me.InfoPaste.MobLoot.commands.MainCommands;
 import me.InfoPaste.MobLoot.core.Config;
+import me.InfoPaste.MobLoot.core.MobMenus;
 import me.InfoPaste.MobLoot.core.StaticMenus;
 import me.InfoPaste.MobLoot.hooks.HookManager;
 import me.InfoPaste.MobLoot.listeners.DeathEvents;
@@ -77,6 +78,8 @@ public class Main extends JavaPlugin {
 
         StaticMenus st = StaticMenus.getInstance();
         st.initializeMenus();
+
+        registerEvents(this, new MobMenus(), new DeathEvents());
 
         startUp.stop();
         getLogger().info("Start up time: " + startUp.time() + "ms");

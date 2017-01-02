@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,28 +29,29 @@ public class Logger {
         }
     }
 
-    public List<String> itemList(List<Double> randoms, List<Double> percents, List<ItemStack> item) {
-        List<String> itemList = new ArrayList<String>();
-        for (int i = 0; i < item.size(); i++) {
-            String itemName = item.get(i).getType().name();
-            String random = String.valueOf(randoms.get(i));
-            String percent = String.valueOf(percents.get(i));
-            String amount = String.valueOf(item.get(i).getAmount());
-            itemList.add(amount + "x" + itemName + " [R:" + random + ", P:" + percent + "]");
-        }
-        return itemList;
+    public static void loadLogger() {
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        logger = new Logger(df.format(date) + ".txt");
     }
 
-    public void drop(String player, String mob, List<String> itemList, double money) {
+    public void drop(String player, String mob, List<ItemStack> itemList, double money) {
         if (enabled) {
 
             StringBuilder stringBuilder = new StringBuilder();
-            for (String string : itemList) {
-                stringBuilder.append(string).append(", ");
+            for (ItemStack item : itemList) {
+
+                String name = item.getType().name().toLowerCase();
+                if (item.hasItemMeta()) {
+                    name = item.getItemMeta().getDisplayName();
+                }
+
+                stringBuilder.append(name).append(", ");
             }
+
             String items = stringBuilder.toString().substring(0, stringBuilder.length() - 2);
 
-            String log = "%player% killed a %mob% and earned %items% along with %money%"
+            String log = "%player% killed a %mob% and earned %items% and earned %money%"
                     .replaceAll("%player%", player)
                     .replaceAll("%mob%", mob)
                     .replaceAll("%items%", items)
@@ -101,11 +101,5 @@ public class Logger {
                 plugin.getLogger().info("Could not write to transaction file");
             }
         }
-    }
-
-    public static void loadLogger() {
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        logger = new Logger(df.format(date) + ".txt");
     }
 }

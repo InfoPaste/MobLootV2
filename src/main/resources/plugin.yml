@@ -16,7 +16,7 @@
     item:
       description: Commands for editing items
       usage: /<command>
-      aliases: [hand, edit]
+      aliases: [hand, edit, items]
 
  permissions:
     mobloot.*:

@@ -53,6 +53,7 @@ public class Config {
     public static void saveData() {
         try {
             data.save(dfile);
+            reloadDataFile();
         } catch (IOException e) {
             System.out.print("Error");
         }

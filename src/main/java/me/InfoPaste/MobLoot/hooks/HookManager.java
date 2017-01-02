@@ -35,6 +35,16 @@ public class HookManager {
         }
     }
 
+    public static String getEconomyManger() {
+        if (isVaultLoaded()) {
+            if (vault.getEconomyManager() != null) {
+                return vault.getEconomyManager();
+            }
+            return vault.getEconomyManager();
+        }
+        return "Not Found";
+    }
+
     public static void givePlayerMoney(String player, double amount) {
         if (isVaultLoaded()) {
             vault.depositPlayer(player, amount);

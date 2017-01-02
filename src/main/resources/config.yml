@@ -1,18 +1,8 @@
-# Thank you for using MobLoot!
-
+# Thank you for testing MobLootV2 Beta!
 PermissionDenied: '&8[ &c:( &8] &7You do not have permission to do that!'
 
-# Max amount of custom items that can be dropped (overides 100% drop rate)
-MaxItemDrops: 8
-
-# Only one of these vaules can be true
-MobSpawner:
-  # Only drop MobLoot items from mobs spawn by a Mob Spawner
-  OnlyFromSpawners: false
-  # Disable MobLoot Drops from mobs spawn by a Mob Spawner
-  NotFromSpawners: false
-
-ShiftClick: true
+# Decimal Places of randomly generated number when dropping items
+RandomDecimalPlaces: 5
 
 Logger: true
 
@@ -25,15 +15,10 @@ MoneySettings:
   # If you use "#.##" (# means "optional" digit), it will drop trailing zeroes
   DisplayFormat: '#,###,##0.00'
 
-  # 2 = $2.51 , 1 = $2.5, 0 = $2
   DisableMessage: false
   # Variables:
-  #   %uentity% - Displays entitys name in upper case
-  #   %lentity% - Displays entitys name in lower case
-  #   %entity% - Displays entitys with first letter capitalized
+  #   %uentity% - Displays entity's name in upper case
+  #   %lentity% - Displays entity's name in lower case
+  #   %entity% - Displays entity's with first letter capitalized
   #   %money% - Displays money value
   Message: '&8[&dMob Loot&8] &7You recived &a%money% &7for killing a &a%lentity%&7!'
-
-UnknownSpawnCause:
-  DropItems: true
-  ConsoleMessage: false

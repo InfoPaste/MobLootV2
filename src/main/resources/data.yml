@@ -1,5 +1,17 @@
 # !! Sensitive data !!
 # These values can be changed in game
 # It is recommend you do not change them in the this file
+Mobs:
+  TEMPLATE:
+    Inventory:
+      Items:
+        '0':
+          ==: org.bukkit.inventory.ItemStack
+          type: WATCH
+    Money: '10-20'
+    DefaultDrops: false
+    DefaultExp: false
+    MaxDrops: 10
+
 DisabledWorlds:
     - 'name-of-a-world-here'

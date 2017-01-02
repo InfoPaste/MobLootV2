@@ -29,4 +29,8 @@ class VaultHook {
             this.economy.depositPlayer(player, amount);
         }
     }
+
+    String getEconomyManager() {
+        return economy.getName();
+    }
 }

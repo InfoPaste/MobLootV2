@@ -5,8 +5,10 @@ import me.InfoPaste.MobLoot.commands.MainCommands;
 import me.InfoPaste.MobLoot.core.Config;
 import me.InfoPaste.MobLoot.core.MobMenus;
 import me.InfoPaste.MobLoot.core.StaticMenus;
+import me.InfoPaste.MobLoot.core.WorldMenu;
 import me.InfoPaste.MobLoot.hooks.HookManager;
 import me.InfoPaste.MobLoot.listeners.DeathEvents;
+import me.InfoPaste.MobLoot.listeners.ItemEvents;
 import me.InfoPaste.MobLoot.objects.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -50,9 +52,9 @@ public class Main extends JavaPlugin {
                 return version.replaceAll("[B]", "");
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
+
         return "Error";
     }
 
@@ -74,12 +76,12 @@ public class Main extends JavaPlugin {
         // Check logger into a Singleton?
         loadLogger();
 
-        registerEvents(this, new DeathEvents());
+        System.out.println(HookManager.getEconomyManger());
 
         StaticMenus st = StaticMenus.getInstance();
         st.initializeMenus();
 
-        registerEvents(this, new MobMenus(), new DeathEvents());
+        registerEvents(this, new MobMenus(), new WorldMenu(), new DeathEvents(), new ItemEvents());
 
         startUp.stop();
         getLogger().info("Start up time: " + startUp.time() + "ms");

@@ -57,20 +57,18 @@ public class StaticMenus {
 
                 player.closeInventory();
 
-                if (mobCategory != null) {
+                if (name.equalsIgnoreCase("WorldsMenu")) {
+                    // Open Load Menu
+                    player.closeInventory();
+                    WorldMenu.openWorldMenu(player);
+                } else {
+
                     if (subMenus.containsKey(mobCategory)) {
                         subMenus.get(mobCategory).open(player);
                     } else {
                         // This message should never be sent
                         player.sendMessage("MobLoot >> Error: StaticMenus[initializeMenus()] Category not found. Please contact plugin developer.");
                     }
-                } else if (name.equalsIgnoreCase("Worlds")) {
-                    // Open Load Menu
-                    player.closeInventory();
-                    DynamicMenus.getInstance().loadWorldsMenu().open(player);
-
-                } else {
-                    event.setWillClose(true);
                     // Not a mob Category Menu
                 }
             }
@@ -102,7 +100,6 @@ public class StaticMenus {
 
                         // Open menu of entity they clicked
                         player.closeInventory();
-
                         MobMenus.openMobMenu(player, name);
 
                     }
@@ -134,7 +131,7 @@ public class StaticMenus {
 
         /* MAIN MENU - Static items */
 
-        mainMenu.setOption(9, new ItemStackBuilder(Material.GRASS).withName("&aWorlds").build(), "Worlds");
+        mainMenu.setOption(8, new ItemStackBuilder(Material.GRASS).withName("&aWorlds").build(), "WorldsMenu");
 
         return;
     }
